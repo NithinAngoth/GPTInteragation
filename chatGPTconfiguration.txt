@@ -1,0 +1,76 @@
+dependencies
+
+	spring web
+	lambok
+	spring dev tool
+
+Need to open the chatgpt api and a playground has view code we need to copy the code into the postman and then we need to import the code in the postman as a raw text then it will imported 
+
+Then we will get a third party api if we directly send the api it will not a valid formate to handle to complete it we need to genersate a api_key for authoritation.
+
+for that you need to move in api reference in that there will be create a key by that we can generate the chatGPT api key. then copy the key can then go postman in that authorization choose the type as Bearer type then insert the token.
+
+Create a new folder -> Controller
+			|
+			create a new class -> chatController
+						|
+						In this class ->> It contains the @RestContorller and @RequestMapping("/openAPI")
+							In this class we are creating a method with can fetch the details 
+									@value("${chatgpt.model}") 
+									private String model;
+									
+									@value("${chatgpt.url}")
+								        private String url;
+
+								        @Autowired
+									private RestTemplate temp;
+
+									@GetMapping("/fetchapi")
+In this chatgpt.model = gpt-3.5-turbo in application.properties
+In this chatgpt.url = http://api.openai.com/v1/chat/completions
+									public String fetch(@RequestParam("Value") String promot){
+										ChatGPTRequest request = new ChatGPTRequest(model, promot);
+										ChatGPTResponse response = temp.postForObject(url, request, 												ChatGPTResponse.class);
+										return response.getChoices().get(0).getmessage().getContent();
+
+									}
+
+						
+
+Create a new folder -> config
+			|
+			create a new class -> configChat
+						|		@component
+						In the class ->> public class configChat{
+									@Bean
+									public RestTemplate getTemplate(){
+										RestTemplate restTemplate = new RestTemplate();		
+										   restTemplate.getInterceptors().add(request, body, execution) 											-> { 
+										request.getHeaders().add("Authorization", "Bearer " + token);
+										return execution.execute(request, body);
+										});
+										return restTemplate;
+									}
+								}
+
+create a new folder -> dto
+			|
+			create a new class -> message
+				|		|
+						In this ->> create the variables as role(it can be the user/admin) and content(it as the message)
+								In this we use lombok(@Data(will as getters and setters), @AllArgconstructors, 								@NoArgsconstructor
+					  -> ChatGPTRequest
+						|
+						In this ->> create the variables as model(String)(which is presnt in the api formate), List								(Message)form the message class. then create a constructor with the parameters.
+								in the parameters model will be same and List<Message> will be changed to String 
+								promot then this.message = new ArrayList<Message> and this.message.add(new 										Message(role:model, content:promot)
+					->ChatGPTRespone
+						|
+						In this ->> create a static class of Choice with fileds index and Message message and it is also 
+								as a List<Choice> choice. add Lombok @Data, @NoArgsConstuctors, 											@AllArgsConstructors. 
+
+Interception -> It is used to intercept the Http request and response and it is very similar to servlet filter
+		used to perform the tasks such as Authentication, logging and caching.
+		
+		Interceptors used as a bean in springboot application context. 
+		it is also improve the security performance and logging springboot content.

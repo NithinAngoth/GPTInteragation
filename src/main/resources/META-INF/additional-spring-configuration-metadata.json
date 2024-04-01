@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "chatgpt.key",
+    "type": "java.lang.String",
+    "description": "A description for 'chatgpt.key'"
+  },
+  {
+    "name": "chatgpt.model",
+    "type": "java.lang.String",
+    "description": "A description for 'chatgpt.model'"
+  },
+  {
+    "name": "chatgpt.url",
+    "type": "java.lang.String",
+    "description": "A description for 'chatgpt.url'"
+  }
+]}
